@@ -6,6 +6,6 @@ namespace _net8_IdentityServer;
 public class ApplicationUser : IdentityUser
 {
     [Required]
-    public string? Name { get; set; }
+    public string? FullName { get; set; }
     public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
 }

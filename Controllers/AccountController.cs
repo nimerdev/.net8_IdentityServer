@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,17 +10,20 @@ namespace _net8_IdentityServer;
 public class AccountsController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    public AccountsController(UserManager<ApplicationUser> userManager)
+    private readonly AccountMgmtService _accountMgmtService;
+    public AccountsController(UserManager<ApplicationUser> userManager, AccountMgmtService accountMgmtService)
     {
         _userManager = userManager;
+        _accountMgmtService = accountMgmtService;
     }
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAccounts()
     {
         var accounts = await _userManager.Users.ToListAsync();
         return Ok(accounts);
     }
-    [HttpPost("register")]
+    [HttpPost("Register")]
     public async Task<IActionResult> RegisterAccount([FromBody] RegistrationDto model)
     {
         Console.WriteLine(model);
@@ -27,7 +31,7 @@ public class AccountsController : ControllerBase
         {
             UserName = model.Email,
             Email = model.Email,
-            Name = model.Name,
+            FullName = model.FullName,
             PhoneNumber = model.PhoneNumber
             // Set other properties
         };
@@ -43,4 +47,17 @@ public class AccountsController : ControllerBase
         // If registration fails, return errors
         return BadRequest(new { Errors = result.Errors });
     }
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto model)
+    {
+        try
+            {
+                return Ok(await _accountMgmtService.Login(model));
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+    }
 }
+

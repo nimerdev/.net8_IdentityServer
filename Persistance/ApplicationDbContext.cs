@@ -5,8 +5,10 @@ namespace _net8_IdentityServer;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
-public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+    public DbSet<Organization> Accounts { get; set; }
+    public DbSet<OrganizationUser> AccountUsers { get; set; }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
     {
     }
 

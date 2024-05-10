@@ -18,9 +18,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     .UseInMemoryDatabase("AppDb")
     .EnableSensitiveDataLogging());
 
-builder.Services.AddIdentityCore<ApplicationUser>()
+builder.Services.AddIdentityCore<ApplicationUser>(
+    options =>
+    {
+        options.User.RequireUniqueEmail = true;
+    })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddApiEndpoints();
+
+
+#region selfDevelopedServices
+
+builder.Services.AddScoped<AccountMgmtService>();
+builder.Services.AddTransient<AccountRepository>();
+
+#endregion
+
+
 
 builder.Services.AddControllers();
 
@@ -44,7 +58,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -58,7 +72,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
-app.MapIdentityApi<ApplicationUser>();
+//app.MapIdentityApi<ApplicationUser>();
 
 app.Run();
 
