@@ -22,9 +22,14 @@ builder.Services.AddIdentityCore<ApplicationUser>(
     options =>
     {
         options.User.RequireUniqueEmail = true;
+        options.Password.RequiredLength = 12;
+        options.Password.RequireDigit = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
     })
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddApiEndpoints();
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+    //.AddApiEndpoints();
 
 
 #region selfDevelopedServices

@@ -11,8 +11,6 @@ public class OrganizationUser
     public Organization Organization { get; set; }
     [MaxLength(450)]
     public string UserId { get; set; }
-    [ForeignKey("OrganizationUserStatus")]
-    public int StatusId { get; set; }
     public OrganizationUserStatus OrganizationUserStatus { get; set; }
     public DateTime DateJoined { get; set; }
     // [ForeignKey("ApplicationRole")]
@@ -33,26 +31,34 @@ public class OrganizationUser
     public string? ValidationCode { get; set; }
     public DateTime? ValidationCodeExpirationDate { get; set; }
     public int ValidationCodeAttempts { get; set; }
-
-    public enum Validation2FATypes
-    {
-        Email = 0,
-        SMS = 1,
-        Application = 2
-    }
 }
 
-public class OrganizationUserStatus
+public enum Validation2FATypes
 {
-    [Key]
-    public int StatusId { get; set; }
-    [MaxLength(50)]
-    public string StatusName { get; set; }
-    [MaxLength(100)]
-    public string StatusDesc { get; set; }
-    public bool IsInitial { get; set; }
-    public bool IsActive { get; set; }
-    public bool IsPending { get; set; }
-    public bool IsNotActive { get; set; }
-    public bool IsDeleted { get; set; }
+    Email = 0,
+    SMS = 1,
+    Application = 2
 }
+
+public enum OrganizationUserStatus
+{
+    Pending = 0,
+    Active = 1,
+    InActive = 2,
+    Deleted = 3
+}
+
+// public class OrganizationUserStatus
+// {
+//     [Key]
+//     public int StatusId { get; set; }
+//     [MaxLength(50)]
+//     public string StatusName { get; set; }
+//     [MaxLength(100)]
+//     public string StatusDesc { get; set; }
+//     public bool IsInitial { get; set; }
+//     public bool IsActive { get; set; }
+//     public bool IsPending { get; set; }
+//     public bool IsNotActive { get; set; }
+//     public bool IsDeleted { get; set; }
+// }
