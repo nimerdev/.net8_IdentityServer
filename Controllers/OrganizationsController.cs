@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,57 +8,49 @@ namespace _net8_IdentityServer;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AccountsController : ControllerBase
+public class OrganizationsController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly AccountMgmtService _accountMgmtService;
-    public AccountsController(UserManager<ApplicationUser> userManager, AccountMgmtService accountMgmtService)
+    private readonly OrgMgmtService _orgMgmtService;
+    public OrganizationsController(UserManager<ApplicationUser> userManager, OrgMgmtService orgMgmtService)
     {
         _userManager = userManager;
-        _accountMgmtService = accountMgmtService;
+        _orgMgmtService = orgMgmtService;
     }
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetAccounts()
+    public async Task<IActionResult> GetUsers()
     {
-        var accounts = await _userManager.Users.ToListAsync();
-        return Ok(accounts);
+        var users = await _userManager.Users.ToListAsync();
+        return Ok(users);
     }
     [HttpPost("Register")]
-    public async Task<IActionResult> RegisterAccount([FromBody] RegistrationDto model)
+    public async Task<IActionResult> RegisterOrganziationAndUser([FromBody] RegistrationDto model)
     {
         Console.WriteLine(model);
-        var user = new ApplicationUser
-        {
-            UserName = model.Email,
-            Email = model.Email,
-            FullName = model.FullName,
-            PhoneNumber = model.PhoneNumber
-            // Set other properties
-        };
 
-        var result = await _userManager.CreateAsync(user, model.Password);
-
-        if (result.Succeeded)
+        try
         {
-            // Your registration success logic
-            return Ok(new { Message = "Registration successful" });
+            var result = await _orgMgmtService.RegisterOrganziationAndUser(model);
+            return Ok(result);
         }
-
-        // If registration fails, return errors
-        return BadRequest(new { Errors = result.Errors });
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
+
     [HttpPost("Login")]
     public async Task<IActionResult> Login([FromBody] LoginDto model)
     {
         try
-            {
-                return Ok(await _accountMgmtService.Login(model));
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(ex.Message);
-            }
+        {
+            return Ok(await _orgMgmtService.Login(model));
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized(ex.Message);
+        }
     }
 }
 

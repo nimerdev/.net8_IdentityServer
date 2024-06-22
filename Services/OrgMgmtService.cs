@@ -4,24 +4,24 @@ using Microsoft.AspNetCore.Identity;
 
 namespace _net8_IdentityServer;
 
-public class AccountMgmtService
+public class OrgMgmtService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly RoleManager<ApplicationUser> _roleManager;
+    //private readonly RoleManager<ApplicationUser> _roleManager;
     private OrganizationRepository _organziationRepository;
-    public AccountMgmtService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationUser> roleManager,
+    public OrgMgmtService(UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager, OrganizationRepository organziationRepository)
     {
         _userManager = userManager;
-        _roleManager = roleManager;
+        //_roleManager = roleManager;
         _signInManager = signInManager;
         _organziationRepository = organziationRepository;
     }
-    public async Task RegisterAccount(RegistrationDto model)
+    public async Task<object> RegisterOrganziationAndUser(RegistrationDto model)
     {
-        using (var transaction = _organziationRepository.GetContext().Database.BeginTransaction())
-        {
+        // using (var transaction = _organziationRepository.GetContext().Database.BeginTransaction())
+        // {
             try
             {
                 #region CreatingOrganization
@@ -31,7 +31,6 @@ public class AccountMgmtService
                     IsActive = 1,
                     Name = model.OrganizationName
                 };
-                //todo: continue!
 
                 var tempOrgName = model.OrganizationName;
                 while (await _organziationRepository.GetOrganizationByName(tempOrgName) != null)
@@ -48,7 +47,7 @@ public class AccountMgmtService
                 }
                 org.Token = token;
                 org = await _organziationRepository.InsertOrganization(org);
-                if(org == null)
+                if (org == null)
                 {
                     throw new Exception($"Error creating organization {org.Name}");
                 }
@@ -56,7 +55,7 @@ public class AccountMgmtService
                 #endregion
 
                 #region CreateOrganizationUserAndUser
-                
+
                 var newUser = new ApplicationUser
                 {
                     UserName = model.Email,
@@ -67,9 +66,9 @@ public class AccountMgmtService
                 };
 
                 var userManagerResult = await _userManager.CreateAsync(newUser, model.Password);
-                if(!userManagerResult.Succeeded)
+                if (!userManagerResult.Succeeded)
                 {
-                    throw new Exception($"Error creating user {model.Email}. {string.Join(",",userManagerResult.Errors.Select(x => x.Description))}");
+                    throw new Exception($"Error creating user {model.Email}. {string.Join(",", userManagerResult.Errors.Select(x => x.Description))}");
                 }
 
                 var orgUser = new OrganizationUser
@@ -80,17 +79,25 @@ public class AccountMgmtService
                     DateJoined = DateTime.UtcNow
                 };
 
-                //todo: add inserting orgUser and OrgUserRepository
+                await _organziationRepository.InsertOrganizationUser(orgUser);
 
                 #endregion
+
+                //transaction.Commit();
+                return new
+                {
+                    orgId = org.OrganizationId,
+                    orgUser = orgUser.OrganizationUserID
+                };
 
 
             }
             catch (Exception)
             {
+                //transaction.Rollback();
                 throw;
             }
-        }
+        //}
     }
     public async Task<bool> Login(LoginDto model)
     {

@@ -28,14 +28,15 @@ builder.Services.AddIdentityCore<ApplicationUser>(
         options.Password.RequireLowercase = true;
         options.Password.RequireUppercase = true;
     })
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddSignInManager();
     //.AddApiEndpoints();
 
 
 #region selfDevelopedServices
 
-builder.Services.AddScoped<AccountMgmtService>();
-builder.Services.AddTransient<AccountRepository>();
+builder.Services.AddScoped<OrgMgmtService>();
+builder.Services.AddTransient<OrganizationRepository>();
 
 #endregion
 
@@ -44,6 +45,8 @@ builder.Services.AddTransient<AccountRepository>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+// app.MapIdentityApi<ApplicationUser>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

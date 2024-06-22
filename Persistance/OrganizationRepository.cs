@@ -2,7 +2,7 @@
 
 namespace _net8_IdentityServer;
 
-public class OrganizationRepository
+public partial class OrganizationRepository
 {
     private ApplicationDbContext _dbContext;
     public OrganizationRepository(ApplicationDbContext dbContext)
