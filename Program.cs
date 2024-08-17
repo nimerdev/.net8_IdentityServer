@@ -13,9 +13,11 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     .AddIdentityCookies();
 builder.Services.AddAuthorizationBuilder();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options
-    .UseInMemoryDatabase("AppDb")
+    .UseNpgsql(connectionString)
     .EnableSensitiveDataLogging());
 
 builder.Services.AddIdentityCore<ApplicationUser>(

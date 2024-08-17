@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Web;
+using _net8_IdentityServer.RegistrationModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace _net8_IdentityServer;
@@ -8,17 +9,15 @@ public class OrgMgmtService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    //private readonly RoleManager<ApplicationUser> _roleManager;
     private OrganizationRepository _organziationRepository;
     public OrgMgmtService(UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager, OrganizationRepository organziationRepository)
     {
         _userManager = userManager;
-        //_roleManager = roleManager;
         _signInManager = signInManager;
         _organziationRepository = organziationRepository;
     }
-    public async Task<object> RegisterOrganziationAndUser(RegistrationDto model)
+    public async Task<object> RegisterOrganziationAndUser(NewUserAndNewOrgRegistrationDto model)
     {
         // using (var transaction = _organziationRepository.GetContext().Database.BeginTransaction())
         // {
@@ -76,7 +75,7 @@ public class OrgMgmtService
                     OrganizationId = org.OrganizationId,
                     UserId = newUser.Id,
                     OrganizationUserStatus = OrganizationUserStatus.Active,
-                    DateJoined = DateTime.UtcNow
+                    OrganizationUserRole = OrganizationUserRole.Admin
                 };
 
                 await _organziationRepository.InsertOrganizationUser(orgUser);

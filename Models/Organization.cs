@@ -15,7 +15,7 @@ public class Organization
     [MaxLength(50)]
     public string? Country { get; set; } = string.Empty;
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [MaxLength(100)]
     public string? Logo { get; set; } = string.Empty;

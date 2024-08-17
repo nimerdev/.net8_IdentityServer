@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace _net8_IdentityServer;
+namespace _net8_IdentityServer.RegistrationModels;
 
-public class RegistrationDto
+public class NewUserAndNewOrgRegistrationDto
 {
 [Required,EmailAddress]
 public string? Email { get; set; }

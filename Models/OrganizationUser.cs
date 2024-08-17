@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace _net8_IdentityServer;
 
@@ -11,11 +12,11 @@ public class OrganizationUser
     public Organization Organization { get; set; }
     [MaxLength(450)]
     public string UserId { get; set; }
+    [Required]
     public OrganizationUserStatus OrganizationUserStatus { get; set; }
-    public DateTime DateJoined { get; set; }
-    // [ForeignKey("ApplicationRole")]
-    // public int RoleId { get; set; }
-    // public ApplicationRole ApplicationRole { get; set; }
+    [Required]
+    public OrganizationUserRole OrganizationUserRole { get; set; }
+    public DateTime DateJoined { get; set; } = DateTime.UtcNow;
     public DateTime? LastSignInDate { get; set; }
     public DateTime? LastActivityDate { get; set; }
     public string? InvitedByUserId { get; set; }
@@ -46,6 +47,12 @@ public enum OrganizationUserStatus
     Active = 1,
     InActive = 2,
     Deleted = 3
+}
+
+public enum OrganizationUserRole
+{
+    Admin = 1,
+    Member = 2
 }
 
 // public class OrganizationUserStatus

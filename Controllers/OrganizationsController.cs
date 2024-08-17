@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using _net8_IdentityServer.RegistrationModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ public class OrganizationsController : ControllerBase
         return Ok(users);
     }
     [HttpPost("Register")]
-    public async Task<IActionResult> RegisterOrganziationAndUser([FromBody] RegistrationDto model)
+    public async Task<IActionResult> RegisterOrganziationAndUser([FromBody] NewUserAndNewOrgRegistrationDto model)
     {
         Console.WriteLine(model);
 
