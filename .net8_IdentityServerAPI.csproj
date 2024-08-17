@@ -20,7 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\RegistrationModels\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\SharedResources\SharedResources.csproj" />
   </ItemGroup>
 
 </Project>

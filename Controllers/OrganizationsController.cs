@@ -1,9 +1,10 @@
-﻿using _net8_IdentityServer.RegistrationModels;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SharedResources.Models;
+using SharedResources.Models.RegistrationModels;
 
 namespace _net8_IdentityServer;
 

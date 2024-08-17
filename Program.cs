@@ -1,6 +1,7 @@
 using _net8_IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SharedResources.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

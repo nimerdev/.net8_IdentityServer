@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Web;
-using _net8_IdentityServer.RegistrationModels;
 using Microsoft.AspNetCore.Identity;
+using SharedResources.Models;
 
 namespace _net8_IdentityServer;
 
@@ -17,7 +17,7 @@ public class OrgMgmtService
         _signInManager = signInManager;
         _organziationRepository = organziationRepository;
     }
-    public async Task<object> RegisterOrganziationAndUser(NewUserAndNewOrgRegistrationDto model)
+    public async Task<object> RegisterOrganziationAndUser(SharedResources.Models.RegistrationModels.NewUserAndNewOrgRegistrationDto model)
     {
         // using (var transaction = _organziationRepository.GetContext().Database.BeginTransaction())
         // {
